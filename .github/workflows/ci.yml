@@ -1,0 +1,16 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  Linter-run:
+    name: Run Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Super-Linter
+        uses: super-linter/super-linter@v5.7.2
