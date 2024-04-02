@@ -86,16 +86,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Login to Amazon ECR
-        run: echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login -u AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+        run: echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login -u AWS --password-stdin 355001659877.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Build Docker image
         run: docker build -t my-node-img .
 
       - name: Tag Docker image
-        run: docker tag my-node-img:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/my-ecr-repo:latest
+        run: docker tag my-node-img:latest 355001659877.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
 
       - name: Push Docker image to ECR
-        run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/my-ecr-repo:latest
+        run: docker push 355001659877.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
 
   Deploy-to-EKS:
     name: Deploy to EKS
