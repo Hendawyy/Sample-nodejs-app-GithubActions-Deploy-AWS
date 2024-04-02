@@ -15,7 +15,7 @@ resource "aws_eks_node_group" "nawy_node_group" {
     max_unavailable = 1
   }
   tags = {
-    Name = "nawy-eks-instance${count.index + 1}"
+    Name = "nawy-eks-instance"
   }
   depends_on = [
     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
