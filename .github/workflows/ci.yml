@@ -65,7 +65,7 @@ jobs:
           terraform plan
 
       - name: Terraform Apply
-        if: github.event.inputs.action == 'apply'
+        if: ${{ github.event.inputs.terraform_operation == 'apply' || !github.event.inputs.terraform_operation }}
         run: |
           cd Terraform
           terraform apply --auto-approve
