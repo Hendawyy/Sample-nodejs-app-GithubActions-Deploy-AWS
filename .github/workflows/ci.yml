@@ -17,21 +17,11 @@ on:
           - 'destroy'
 
 jobs:
-  Linter-run:
-    name: Run Linter
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Super-Linter
-        uses: super-linter/super-linter@v5.7.2
-
   Terraform:
     name: Terraform Deployment
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: 'us-east-1'
+    outputs:
+      terraform_state: ${{ steps.save_tf_state.outputs.state_file }}
 
     steps:
       - name: Checkout Terraform
@@ -62,13 +52,20 @@ jobs:
         id: plan
         run: |
           cd Terraform
-          terraform plan
+          terraform plan -out=tfplan
+
+      - name: Save Terraform state file
+        id: save_tf_state
+        run: |
+          cd Terraform
+          terraform show -json > tfstate.json
+          echo "::set-output name=state_file::tfstate.json"
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.terraform_operation == 'apply' || !github.event.inputs.terraform_operation }}
         run: |
           cd Terraform
-          terraform apply --auto-approve
+          terraform apply --auto-approve tfplan
 
       - name: Terraform Destroy
         if: github.event.inputs.action == 'destroy'
