@@ -17,11 +17,23 @@ on:
           - 'destroy'
 
 jobs:
+  Linter-run:
+    name: Run Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Super-Linter
+        uses: super-linter/super-linter@v5.7.2
+
   Terraform:
     name: Terraform Deployment
     runs-on: ubuntu-latest
     outputs:
       terraform_state: ${{ steps.save_tf_state.outputs.state_file }}
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: 'us-east-1'
 
     steps:
       - name: Checkout Terraform
